@@ -9,7 +9,7 @@ const TodoNew = (props) => {
   const {addNewToDo} = props
   // addNewToDo("Trọng")
   const handleClick = () =>{
-    console.log(valueInput)
+    addNewToDo(valueInput)
   }
 
   const handleOnChange = (name) =>{
