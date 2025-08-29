@@ -10,8 +10,6 @@ const App = () => {
     // {id: 2, name: "Watching Youtube"}
   ])
 
-  
-
   const addNewToDo = (name) => {
     const newTodo = {
       id: randomIntFromInterval(1, 1000000),
@@ -24,21 +22,25 @@ const App = () => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-
   // {key: value}
   return (
     <div className="todo-container">
       <div className="todo-title">Todo List</div>
       <TodoNew
-      addNewToDo = {addNewToDo}/>
-      <TodoData 
-      todoList = {todoList}
-      />
-      <div className='todo-img'>
-        <img src={reactLogo} alt="" className='logo'/>
-      </div>
+        addNewToDo={addNewToDo} />
+
+      {todoList.length > 0
+        ?
+        <TodoData
+          todoList={todoList}
+        />
+        :
+        <div className='todo-img'>
+          <img src={reactLogo} alt="" className='logo' />
+        </div>
+      }
     </div>
-    
+
   )
 }
 
