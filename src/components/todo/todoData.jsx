@@ -2,20 +2,27 @@
 // lấy ra biến name từ props luôn 
 
 const TodoData = (props) => {
-    const {todoList} = props
-    return (
-      <div className='todo-data'> 
-        {todoList.map((item, index) => {
-          console.log(item, index)
-          return (
-          <div className= {`todo-item ${index}`} key  = {item.id}>
+  const { todoList, deleteToDo } = props
+
+  const handleClick = (id) => {
+    deleteToDo(id)
+  }
+
+  return (
+    <div className='todo-data'>
+      {todoList.map((item, index) => {
+        return (
+          <div className={`todo-item ${index}`} key={item.id}>
             <div>{item.name}</div>
-            <button>Xoá</button>
+            <button
+              style={{ cursor: "pointer" }}
+              onClick={() => handleClick(item.id)}
+            >Xoá</button>
           </div>
-          )
-        })}
-      </div>
-    )
+        )
+      })}
+    </div>
+  )
 }
 
 export default TodoData
