@@ -4,13 +4,13 @@
 const TodoData = (props) => {
     // props là một biến object
     // destructuring object
-    const {name, age, data} = props
+    // const {name, age, data} = props
+    console.log(props)
     return (
       <div className='todo-data'> 
         <div>Learning React</div>
         <div>Watch youtube</div>
-        <div>My name is {name}</div>
-        <div>My hometown is {data.city}</div>
+        <div>{JSON.stringify(props.todoList)}</div>
       </div>
     )
 }
