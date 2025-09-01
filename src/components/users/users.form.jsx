@@ -1,7 +1,7 @@
 import { Input, notification, Modal } from "antd";
 import { Button } from "antd";
 import Password from "antd/es/input/Password";
-import { use, useState } from "react";
+import { useState } from "react";
 import { createUserAPI } from "../../services/api.service";
 
 
