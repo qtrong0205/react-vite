@@ -8,7 +8,6 @@ const UserPage = () => {
 
     // empty array => run once
     useEffect(() => {
-        console.log("run useEffect 111")
         loadUser()
     }, [])
 
