@@ -1,4 +1,4 @@
-import { Input, notification } from "antd";
+import { Input, notification, Modal } from "antd";
 import { Button } from "antd";
 import Password from "antd/es/input/Password";
 import { use, useState } from "react";
@@ -11,13 +11,16 @@ const UserForm = () => {
     const [password, setPassword] = useState("")
     const [phone, setPhone] = useState("")
 
-    const handleOnClick = async () => {
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const handleSubmitClick = async () => {
         const response = await createUserAPI(fullName, email, password, phone)
         if (response.data) {
             notification.success({
                 message: "Create user",
                 description: "Tạo user thành công"
             })
+            setIsModalOpen(false)
         }
         else {
             notification.error({
@@ -29,12 +32,26 @@ const UserForm = () => {
     }
 
     return (
-        <div className="user-form"
-            style={{
-                padding: "30px",
-            }}
-        >
-            <div>
+        <div className="user-form">
+            <div
+                style={{
+                    padding: "30px 30px 10px",
+                }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <h3>Table Users</h3>
+                    <Button type="primary"
+                        onClick={() => setIsModalOpen(true)}
+                    >Create User</Button>
+                </div>
+            </div>
+            <Modal
+                title="Basic Modal"
+                open={isModalOpen}
+                onOk={() => handleSubmitClick()}
+                onCancel={() => setIsModalOpen(false)}
+                maskClosable={false}
+                okText="Create"
+            >
                 <div
                     style={{ marginBottom: "15px" }}>
                     <span>Full Name</span>
@@ -64,12 +81,8 @@ const UserForm = () => {
                         value={phone}
                         onChange={(event) => { setPhone(event.target.value) }} />
                 </div>
-                <div>
-                    <Button type="primary"
-                        onClick={() => handleOnClick()}
-                    >Create User</Button>
-                </div>
-            </div>
+            </Modal>
+
         </div>
     )
 }

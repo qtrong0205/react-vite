@@ -2,10 +2,7 @@ import { Table } from 'antd';
 import { fetchAllUserAPI } from '../../services/api.service';
 import { use, useEffect, useState } from 'react';
 const UserTable = () => {
-    const [dataUsers, setDataUsers] = useState([
-        { _id: "Trọng", fullName: 15, email: "Cần Thơ" },
-        { _id: "kaka", fullName: 15, email: "Cần Thơ" }
-    ])
+    const [dataUsers, setDataUsers] = useState([])
 
     // empty array => run once
     useEffect(() => {
