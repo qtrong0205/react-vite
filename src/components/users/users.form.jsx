@@ -5,7 +5,8 @@ import { use, useState } from "react";
 import { createUserAPI } from "../../services/api.service";
 
 
-const UserForm = () => {
+const UserForm = (props) => {
+    const { loadUser } = props
     const [fullName, setFullName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -20,7 +21,8 @@ const UserForm = () => {
                 message: "Create user",
                 description: "Tạo user thành công"
             })
-            setIsModalOpen(false)
+            resetAndCloseModal()
+            await loadUser()
         }
         else {
             notification.error({
@@ -29,6 +31,14 @@ const UserForm = () => {
             })
         }
         console.log("check res", response.data)
+    }
+
+    const resetAndCloseModal = () => {
+        setEmail("")
+        setFullName("")
+        setPassword("")
+        setPhone("")
+        setIsModalOpen(false)
     }
 
     return (
@@ -48,7 +58,7 @@ const UserForm = () => {
                 title="Basic Modal"
                 open={isModalOpen}
                 onOk={() => handleSubmitClick()}
-                onCancel={() => setIsModalOpen(false)}
+                onCancel={() => resetAndCloseModal()}
                 maskClosable={false}
                 okText="Create"
             >
