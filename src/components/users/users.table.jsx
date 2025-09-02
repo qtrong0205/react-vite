@@ -7,7 +7,7 @@ import ViewUserDetail from './view.user.detail';
 import { deleteUserAPI } from '../../services/api.service';
 
 const UserTable = (props) => {
-    const { dataUsers, loadUser } = props
+    const { dataUsers, loadUser, current, pageSize, total, setCurrent, setPageSize } = props
 
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false)
     const [dataUpdate, setDataUpdate] = useState(null)
@@ -38,7 +38,7 @@ const UserTable = (props) => {
             render: (_, record, index) => {
                 return (
                     <>
-                        {index + 1}
+                        {(index + 1) + (current - 1) * pageSize}
                     </>
                 )
             }
@@ -98,9 +98,38 @@ const UserTable = (props) => {
             ),
         },
     ];
+
+    const onChange = (pagination, filters, sorter, extra) => {
+        // nếu thay đổi trang
+        if (pagination && pagination.current) {
+            if (+current !== +pagination.current) {
+                setCurrent(+pagination.current) // sử dụng dấu cộng tự convert thành số nguyên
+            }
+        }
+        // nếu thay đổi số phần tử mỗi trang
+        if (pagination && pagination.pageSize) {
+            if (+pageSize !== +pagination.pageSize) {
+                setPageSize(+pagination.pageSize)
+            }
+        }
+    };
     return (
         <>
-            <Table columns={columns} dataSource={dataUsers} rowKey={"_id"} style={{ paddingBottom: "30px" }} />
+            <Table
+                columns={columns}
+                dataSource={dataUsers}
+                rowKey={"_id"}
+                style={{ paddingBottom: "30px" }}
+                pagination={
+                    {
+                        current: current,
+                        pageSize: pageSize,
+                        showSizeChanger: true,
+                        total: total,
+                        showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+                    }}
+                onChange={onChange}
+            />
             <UpdateUserModal
                 isModalUpdateOpen={isModalUpdateOpen}
                 setIsModalUpdateOpen={setIsModalUpdateOpen}
