@@ -34,6 +34,16 @@ const UserTable = (props) => {
 
     const columns = [
         {
+            title: 'STT',
+            render: (_, record, index) => {
+                return (
+                    <>
+                        {index + 1}
+                    </>
+                )
+            }
+        },
+        {
             title: 'Id',
             dataIndex: '_id',
             render: (_, record) => {
@@ -90,7 +100,7 @@ const UserTable = (props) => {
     ];
     return (
         <>
-            <Table columns={columns} dataSource={dataUsers} rowKey={"_id"} />
+            <Table columns={columns} dataSource={dataUsers} rowKey={"_id"} style={{ paddingBottom: "30px" }} />
             <UpdateUserModal
                 isModalUpdateOpen={isModalUpdateOpen}
                 setIsModalUpdateOpen={setIsModalUpdateOpen}
@@ -103,6 +113,7 @@ const UserTable = (props) => {
                 setDataDetail={setDataDetail}
                 isDetailOpen={isDetailOpen}
                 setIsDetailOpen={setIsDetailOpen}
+                loadUser={loadUser}
             />
         </>
     )
