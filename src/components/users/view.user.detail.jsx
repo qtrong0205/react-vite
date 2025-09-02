@@ -6,6 +6,9 @@ const ViewUserDetail = (props) => {
     // const [fullName, setFullName] = useState("")
     // const [email, setEmail] = useState("")
     // const [phone, setPhone] = useState("")
+    const [selectedFile, setSelectedFile] = useState(null)
+    const [preview, setPreview] = useState(null)
+
 
     const { dataDetail, setDataDetail, isDetailOpen, setIsDetailOpen } = props
 
@@ -18,6 +21,21 @@ const ViewUserDetail = (props) => {
     //     }
     // }, [dataDetail])
 
+    const handleOnChangeFile = (event) => {
+        if (!event.target.files || event.target.files.length === 0) {
+            setSelectedFile(null)
+            setPreview(null)
+            return
+        }
+
+        // I've kept this example simple by using the first image instead of multiple
+        const file = event.target.files[0]
+        if (file) {
+            setSelectedFile(file)
+            setPreview(URL.createObjectURL(file))
+        }
+        console.log("check file", preview)
+    }
     return (
         <>
             <Drawer
@@ -55,8 +73,17 @@ const ViewUserDetail = (props) => {
                             >
                                 Upload avatar
                             </label>
-                            <input type="file" name="" id="BtnUpload" hidden />
+                            <input type="file" id="BtnUpload" hidden
+                                onChange={(event) => handleOnChangeFile(event)}
+                            />
                         </div>
+                        {preview &&
+                            <div>
+                                <img src={preview}
+                                    style={{ height: "150px", marginBottom: '15px' }}
+                                />
+                            </div>
+                        }
 
                     </>
                     :
