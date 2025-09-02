@@ -1,8 +1,10 @@
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Popconfirm, notification } from "antd";
 import { Table } from 'antd';
 import UpdateUserModal from './update.user.modal';
 import { useState } from "react";
 import ViewUserDetail from './view.user.detail';
+import { deleteUserAPI } from '../../services/api.service';
 
 const UserTable = (props) => {
     const { dataUsers, loadUser } = props
@@ -12,6 +14,25 @@ const UserTable = (props) => {
 
     const [dataDetail, setDataDetail] = useState(null)
     const [isDetailOpen, setIsDetailOpen] = useState(false)
+
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+
+    const handleDeleteBtn = async (id) => {
+        const res = await deleteUserAPI(id)
+        if (res.data) {
+            notification.success({
+                message: "Create user",
+                description: "Xoá user thành công"
+            })
+            await loadUser()
+        }
+        else {
+            notification.error({
+                message: "Error delete user",
+                description: JSON.stringify(res.message)
+            })
+        }
+    }
 
     const columns = [
         {
@@ -50,13 +71,26 @@ const UserTable = (props) => {
                                 setDataUpdate(record)
                                 setIsModalUpdateOpen(true)
                             }} />
-                        <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+
+                        <Popconfirm
+                            title="Delete the task"
+                            description="Bạn có chắc chắn muốn xoá người dùng này?"
+                            onConfirm={() => handleDeleteBtn(record._id)}
+                            onCancel={() => setIsDeleteOpen(false)}
+                            okText="Yes"
+                            cancelText="No"
+                            placement='left'
+                        >
+                            <DeleteOutlined
+                                style={{ cursor: "pointer", color: "red" }}
+                                onClick={() => setIsDeleteOpen(true)} />
+                        </Popconfirm>
+
                     </div>
                 </>
             ),
         },
     ];
-    console.log("Check detail", dataDetail)
     return (
         <>
             <Table columns={columns} dataSource={dataUsers} rowKey={"_id"} />
