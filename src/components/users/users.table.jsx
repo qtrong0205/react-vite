@@ -15,8 +15,6 @@ const UserTable = (props) => {
     const [dataDetail, setDataDetail] = useState(null)
     const [isDetailOpen, setIsDetailOpen] = useState(false)
 
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-
     const handleDeleteBtn = async (id) => {
         const res = await deleteUserAPI(id)
         if (res.data) {
@@ -76,14 +74,13 @@ const UserTable = (props) => {
                             title="Delete the task"
                             description="Bạn có chắc chắn muốn xoá người dùng này?"
                             onConfirm={() => handleDeleteBtn(record._id)}
-                            onCancel={() => setIsDeleteOpen(false)}
                             okText="Yes"
                             cancelText="No"
                             placement='left'
                         >
                             <DeleteOutlined
                                 style={{ cursor: "pointer", color: "red" }}
-                                onClick={() => setIsDeleteOpen(true)} />
+                            />
                         </Popconfirm>
 
                     </div>
