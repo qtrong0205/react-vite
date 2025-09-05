@@ -18,6 +18,7 @@ const LoginPage = () => {
             localStorage.setItem("access_token", res.data.access_token)
             setUser(res.data.user)
             navigate("/")
+            console.log(res.data.user)
         }
         else {
             notification.error({

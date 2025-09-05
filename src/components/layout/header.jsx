@@ -1,19 +1,26 @@
 import { Link, NavLink } from 'react-router-dom'
 import { Menu } from 'antd'
-import { HomeOutlined, UsergroupAddOutlined, AuditOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+    HomeOutlined, UsergroupAddOutlined, AuditOutlined, SettingOutlined
+    , LoginOutlined, AliwangwangOutlined
+} from '@ant-design/icons';
 import { useContext, useState } from 'react';
-import App from '../../App';
 import { AuthContext } from '../context/auth.context';
 const Header = () => {
     const [current, setCurrent] = useState('');
 
     const { user } = useContext(AuthContext);
 
-    console.log("Check user ", user)
     const onClick = e => {
-        console.log('click ', e);
         setCurrent(e.key);
     };
+
+    // const a = !user.id ? {
+    //     label: <Link to={"/login"}>Đăng nhập</Link>,
+    //     key: 'login',
+    //     icon: <LoginOutlined />,
+    // } : {}
+
     const items = [
         {
             label: <Link to={"/"}>Home</Link>,
@@ -30,21 +37,26 @@ const Header = () => {
             key: 'books',
             icon: <AuditOutlined />,
         },
-        {
-            label: 'Cài đặt',
-            key: 'SubMenu',
-            icon: <SettingOutlined />,
-            children: [
-                {
-                    label: <Link to={"/login"}>Đăng nhập</Link>,
-                    key: 'login',
-                },
-                {
-                    label: <Link to={"/register"}>Đăng ký</Link>,
-                    key: 'logout',
-                },
-            ],
-        },
+
+        ...(!user.id ?
+            [{
+                label: <Link to={"/login"}>Đăng nhập</Link>,
+                key: 'login',
+                icon: <LoginOutlined />,
+            }] : []),
+
+        ...(user.id ?
+            [{
+                label: `Welcome ${user.fullName}`,
+                key: 'setting',
+                icon: <AliwangwangOutlined />,
+                children: [
+                    {
+                        label: "Đăng xuất",
+                        key: 'logout',
+                    },
+                ],
+            }] : [])
     ];
     return (
         <Menu
