@@ -30,7 +30,6 @@ const UserForm = (props) => {
                 description: JSON.stringify(response.message)
             })
         }
-        console.log("check res", response.data)
     }
 
     const resetAndCloseModal = () => {

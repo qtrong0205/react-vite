@@ -15,7 +15,6 @@ const UserPage = () => {
     }, [current, pageSize]) // [] + condition
 
     const loadUser = async () => {
-        console.log("check current load", current)
         const response = await fetchAllUserAPI(current, pageSize)
         if (response.data) {
             setDataUsers(response.data.result)
@@ -26,7 +25,6 @@ const UserPage = () => {
 
     }
 
-    console.log("check current", current)
     return (
         <div style={{ padding: "0 25px" }}>
             <UserForm loadUser={loadUser} />

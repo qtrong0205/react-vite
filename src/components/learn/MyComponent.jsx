@@ -15,10 +15,10 @@ const MyComponent = () => {
   return (
     // jsx chỉ có một phần tử cha duy nhất
     // đây là cú pháp khai báo fragment, khi lên browser sẽ không có thẻ nào bọc ngoài 2 thẻ div
-    <> 
+    <>
       <div>Học component cùng {JSON.stringify(arr)} update</div>
-      <div>{console.log("Trọng")}</div>
-      <div className="child" style={{borderRadius : "10px"}}>child</div>
+
+      <div className="child" style={{ borderRadius: "10px" }}>child</div>
     </>
   );
 }

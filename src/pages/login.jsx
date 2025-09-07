@@ -18,7 +18,6 @@ const LoginPage = () => {
             localStorage.setItem("access_token", res.data.access_token)
             setUser(res.data.user)
             navigate("/")
-            console.log(res.data.user)
         }
         else {
             notification.error({
@@ -70,7 +69,11 @@ const LoginPage = () => {
                                 message: "Mật khẩu không được để trống"
                             }]}
                         >
-                            <Input.Password />
+                            <Input.Password
+                                onKeyDown={(event) => {
+                                    if (event.key === "Enter") form.submit()
+                                }}
+                            />
                         </Form.Item>
 
                         <Row

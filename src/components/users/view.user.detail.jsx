@@ -38,11 +38,9 @@ const ViewUserDetail = (props) => {
     }
 
     const handleUpdateAvatar = async () => {
-        console.log("check file", selectedFile)
         const responseUpload = await handleUpdateFile(selectedFile, "avatar")
         if (responseUpload.data) {
             const avatar = responseUpload.data.fileUploaded
-            console.log("check new data", avatar)
             const resUpdateAvatar = await updateUserAvatarAPI(avatar,
                 dataDetail._id, dataDetail.fullName, dataDetail.phone
             )

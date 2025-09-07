@@ -10,7 +10,7 @@ const UpdateUserModal = (props) => {
     const { isModalUpdateOpen, setIsModalUpdateOpen, dataUpdate, setDataUpdate, loadUser } = props
 
     useEffect(() => {
-        console.log("check data update child", dataUpdate)
+
         if (dataUpdate) {
             setId(dataUpdate._id)
             setFullName(dataUpdate.fullName)
@@ -34,7 +34,7 @@ const UpdateUserModal = (props) => {
                 description: JSON.stringify(response.message)
             })
         }
-        console.log("check res", response.data)
+
     }
 
     const resetAndCloseModal = () => {
