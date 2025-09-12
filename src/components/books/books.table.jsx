@@ -1,8 +1,14 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Space, Table } from "antd";
+import { useEffect, useState } from "react"
+import { fetchAllBooksAPI } from "../../services/api.service";
+import ViewBookDetail from "./view.book.detail";
 
 const BooksTable = (props) => {
     const { dataBooks, current, pageSize, total, setCurrent, setPageSize, setTotal } = props
+
+    const [bookDetail, setBookDetail] = useState(null)
+    const [isBookDetailOpen, setIsBookDetailOpen] = useState(false)
 
     const columns = [
         {
@@ -19,7 +25,12 @@ const BooksTable = (props) => {
             key: 'id',
             render: (_, record) => {
                 return (
-                    <a href="#!">
+                    <a href="#"
+                        onClick={() => {
+                            setBookDetail(record)
+                            setIsBookDetailOpen(true)
+                        }}
+                    >
                         {record._id}
                     </a>
                 )
@@ -78,20 +89,29 @@ const BooksTable = (props) => {
         }
     };
     return (
-        <Table
-            columns={columns}
-            dataSource={dataBooks}
-            rowKey={"_id"}
-            pagination={
-                {
-                    current: current,
-                    pageSize: pageSize,
-                    showSizeChanger: true,
-                    total: total,
-                    showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
-                }}
-            onChange={onChange}
-        />
+        <>
+            <Table
+                columns={columns}
+                dataSource={dataBooks}
+                rowKey={"_id"}
+                pagination={
+                    {
+                        current: current,
+                        pageSize: pageSize,
+                        showSizeChanger: true,
+                        total: total,
+                        showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+                    }}
+                onChange={onChange}
+            />
+
+            <ViewBookDetail
+                bookDetail={bookDetail}
+                setBookDetail={setBookDetail}
+                isBookDetailOpen={isBookDetailOpen}
+                setIsBookDetailOpen={setIsBookDetailOpen}
+            />
+        </>
     )
 }
 
