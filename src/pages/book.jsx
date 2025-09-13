@@ -3,6 +3,7 @@ import BooksTable from "../components/books/books.table"
 import { useEffect, useState } from "react"
 import CreateBook from "../components/books/book.create"
 import { fetchAllBooksAPI } from "../services/api.service"
+import CreateBookUnControl from "../components/books/create.book.uncontrol"
 
 const BookPage = () => {
     const [dataBooks, setDataBooks] = useState([])
@@ -31,8 +32,8 @@ const BookPage = () => {
         }
     }
     return (
-        <>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ padding: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px+" }}>
                 <h3>Table Books</h3>
                 <Button type="primary" onClick={() => setIsCreateBookOpen(true)}>Create Book</Button>
             </div>
@@ -44,9 +45,10 @@ const BookPage = () => {
                 setCurrent={setCurrent}
                 setPageSize={setPageSize}
                 setTotal={setTotal}
+                loadBooks={loadBooks}
             />
 
-            <CreateBook
+            {/* <CreateBook
                 isCreateBookOpen={isCreateBookOpen}
                 setIsCreateBookOpen={setIsCreateBookOpen}
                 setTitle={setTitle}
@@ -60,8 +62,14 @@ const BookPage = () => {
                 quantity={quantity}
                 category={category}
                 loadBooks={loadBooks}
+            /> */}
+
+            <CreateBookUnControl
+                isCreateBookOpen={isCreateBookOpen}
+                setIsCreateBookOpen={setIsCreateBookOpen}
+                loadBooks={loadBooks}
             />
-        </>
+        </div>
     )
 }
 

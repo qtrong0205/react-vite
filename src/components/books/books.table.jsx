@@ -3,13 +3,17 @@ import { Space, Table } from "antd";
 import { useEffect, useState } from "react"
 import { fetchAllBooksAPI } from "../../services/api.service";
 import ViewBookDetail from "./view.book.detail";
+import UpdateBookControl from "./book.update.control";
+import UpdateBookUnControl from "./book.update.uncontrol";
 
 const BooksTable = (props) => {
-    const { dataBooks, current, pageSize, total, setCurrent, setPageSize, setTotal } = props
-
     const [bookDetail, setBookDetail] = useState(null)
+    const [isBookUpdateOpen, setIsBookUpdateOpen] = useState(false)
     const [isBookDetailOpen, setIsBookDetailOpen] = useState(false)
+    const [dataUpdate, setDataUpdate] = useState(null)
 
+
+    const { dataBooks, current, pageSize, total, setCurrent, setPageSize, setTotal, loadBooks } = props
     const columns = [
         {
             title: 'STT',
@@ -66,7 +70,12 @@ const BooksTable = (props) => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <EditOutlined style={{ color: "orange" }} />
+                    <EditOutlined style={{ color: "orange" }}
+                        onClick={() => {
+                            setDataUpdate(record)
+                            setIsBookUpdateOpen(true)
+                        }}
+                    />
                     <DeleteOutlined style={{ color: "red" }} />
                 </Space>
             ),
@@ -110,6 +119,22 @@ const BooksTable = (props) => {
                 setBookDetail={setBookDetail}
                 isBookDetailOpen={isBookDetailOpen}
                 setIsBookDetailOpen={setIsBookDetailOpen}
+            />
+
+            {/* <UpdateBookControl
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                isBookUpdateOpen={isBookUpdateOpen}
+                setIsBookUpdateOpen={setIsBookUpdateOpen}
+                loadBooks={loadBooks}
+            /> */}
+
+            <UpdateBookUnControl
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                isBookUpdateOpen={isBookUpdateOpen}
+                setIsBookUpdateOpen={setIsBookUpdateOpen}
+                loadBooks={loadBooks}
             />
         </>
     )

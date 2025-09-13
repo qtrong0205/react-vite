@@ -1,60 +1,83 @@
-import { Button, Input, InputNumber, Modal, notification, Select } from "antd"
+import { Input, InputNumber, message, Modal, notification, Select } from "antd"
+import { use, useEffect } from "react"
 import { useState } from "react"
-import { createBookAPI, handleUpdateFile } from "../../services/api.service"
-const CreateBook = (props) => {
-    const [selectedFile, setSelectedFile] = useState(null)
-    const [preview, setPreview] = useState(null)
+import { handleUpdateFile, updateBookAPI } from "../../services/api.service"
 
-    const { isCreateBookOpen, setIsCreateBookOpen, setTitle, setAuthor, setPrice, setQuantity, setCategory,
-        title, author, price, quantity, category, loadBooks
-    } = props
+const UpdateBookControl = (props) => {
+    const [Id, setID] = useState("")
+    const [mainText, setMainText] = useState("")
+    const [author, setAuthor] = useState("")
+    const [price, setPrice] = useState("")
+    const [quantity, setQuantity] = useState("")
+    const [category, setCategory] = useState("")
+    const [preview, setPreview] = useState(null)
+    const [selectedFile, setSelectedFile] = useState(null)
+    const { dataUpdate, setDataUpdate, isBookUpdateOpen, setIsBookUpdateOpen, loadBooks } = props
+
+    useEffect(() => {
+        if (dataUpdate && dataUpdate._id) {
+            setID(dataUpdate._id)
+            setMainText(dataUpdate.mainText)
+            setAuthor(dataUpdate.author)
+            setPrice(dataUpdate.price)
+            setQuantity(dataUpdate.quantity)
+            setCategory(dataUpdate.category)
+            setPreview(`${import.meta.env.VITE_BACKEND_URL}/images/book/${dataUpdate.thumbnail}`)
+        }
+    }, [dataUpdate])
+    const resetAndCloseModal = () => {
+        setIsBookUpdateOpen(false)
+        setID("")
+        setAuthor("")
+        setMainText("")
+        setPrice("")
+        setQuantity("")
+        setCategory("")
+        setDataUpdate(null)
+        setPreview(null)
+        setSelectedFile(null)
+    }
 
     const handleSubmitClick = async () => {
-        let thumbnailPath
-        if (selectedFile) {
+        if (!preview && !selectedFile) {
+            notification.error({
+                message: "Update book error",
+                description: "Vui lòng thêm thumbnail"
+            })
+            return
+        }
+        let thumbnailPath = ""
+        if (preview && selectedFile) {
             const resUpload = await handleUpdateFile(selectedFile, "book")
             if (resUpload.data) {
                 thumbnailPath = resUpload.data.fileUploaded
             }
+            else {
+                notification.error({
+                    message: "Error upload file",
+                    description: JSON.stringify(resUpload.message)
+                })
+            }
+        }
+        else {
+            thumbnailPath = dataUpdate.thumbnail
+        }
+        const res = await updateBookAPI(thumbnailPath, Id, mainText, author, price, quantity, category)
+        if (res.data) {
+            notification.success({
+                message: "Update book",
+                description: "Cập nhật book thành công"
+            })
+            await loadBooks()
         }
         else {
             notification.error({
-                message: "Create Book",
-                description: "Vui lòng thêm ảnh thumbnail"
-            })
-        }
-
-        const res = await createBookAPI(thumbnailPath, title, author, price, quantity, category)
-
-        if (res.data) {
-            notification.success({
-                message: "Create book",
-                description: "Tạo book mới thành công"
-            })
-            resetAndCloseModal()
-            await loadBooks()
-        } else {
-            notification.error({
-                message: "Create book",
+                message: "Update book error",
                 description: res.message
             })
         }
+        resetAndCloseModal()
     }
-
-    const resetAndCloseModal = () => {
-        setTitle("")
-        setAuthor("")
-        setPrice("")
-        setQuantity("")
-        setCategory("")
-        setSelectedFile(null)
-        setPreview(null)
-        setIsCreateBookOpen(false)
-    }
-
-    const handleChange = value => {
-        setCategory(value)
-    };
 
     const handleOnChangeFile = (event) => {
         if (!event.target.files || event.target.files.length === 0) {
@@ -73,7 +96,7 @@ const CreateBook = (props) => {
     return (
         <Modal
             title="Update a user"
-            open={isCreateBookOpen}
+            open={isBookUpdateOpen}
             onOk={() => handleSubmitClick()}
             onCancel={() => resetAndCloseModal()}
             maskClosable={false}
@@ -81,10 +104,18 @@ const CreateBook = (props) => {
         >
             <div
                 style={{ marginBottom: "15px" }}>
+                <span>ID</span>
+                <Input
+                    value={Id}
+                    disabled
+                />
+            </div>
+            <div
+                style={{ marginBottom: "15px" }}>
                 <span>Tiêu đề</span>
                 <Input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={mainText}
+                    onChange={(e) => setMainText(e.target.value)}
                 />
             </div>
             <div
@@ -118,7 +149,7 @@ const CreateBook = (props) => {
                 <span style={{ display: "block" }}>Thể loại</span>
                 <Select
                     style={{ width: "100%" }}
-                    onChange={handleChange}
+                    // onChange={handleChange}
                     options={[
                         { value: 'Arts', label: 'Arts' },
                         { value: 'Business', label: 'Business' },
@@ -134,6 +165,7 @@ const CreateBook = (props) => {
                         { value: 'Travel', label: 'Travel' },
                     ]}
                     value={category}
+                    onChange={(value) => setCategory(value)}
                 />
             </div>
             <div>
@@ -163,4 +195,4 @@ const CreateBook = (props) => {
     )
 }
 
-export default CreateBook
+export default UpdateBookControl
