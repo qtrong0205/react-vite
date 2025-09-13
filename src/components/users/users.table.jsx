@@ -19,7 +19,7 @@ const UserTable = (props) => {
         const res = await deleteUserAPI(id)
         if (res.data) {
             notification.success({
-                message: "Create user",
+                message: "Delete user",
                 description: "Xoá user thành công"
             })
             await loadUser()

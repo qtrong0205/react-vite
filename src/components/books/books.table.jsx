@@ -1,7 +1,7 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Space, Table } from "antd";
+import { notification, Popconfirm, Space, Table } from "antd";
 import { useEffect, useState } from "react"
-import { fetchAllBooksAPI } from "../../services/api.service";
+import { deleteBookAPI, fetchAllBooksAPI } from "../../services/api.service";
 import ViewBookDetail from "./view.book.detail";
 import UpdateBookControl from "./book.update.control";
 import UpdateBookUnControl from "./book.update.uncontrol";
@@ -14,6 +14,23 @@ const BooksTable = (props) => {
 
 
     const { dataBooks, current, pageSize, total, setCurrent, setPageSize, setTotal, loadBooks } = props
+
+    const handleDeleteBtn = async (id) => {
+        const res = await deleteBookAPI(id)
+        if (res.data) {
+            notification.success({
+                message: "Create user",
+                description: "Xoá user thành công"
+            })
+            await loadBooks()
+        }
+        else {
+            notification.error({
+                message: "Error delete book",
+                description: JSON.stringify(res.message)
+            })
+        }
+    }
     const columns = [
         {
             title: 'STT',
@@ -76,7 +93,18 @@ const BooksTable = (props) => {
                             setIsBookUpdateOpen(true)
                         }}
                     />
-                    <DeleteOutlined style={{ color: "red" }} />
+                    <Popconfirm
+                        title="Delete the task"
+                        description="Bạn có chắc chắn muốn xoá book này?"
+                        onConfirm={() => handleDeleteBtn(record._id)}
+                        okText="Yes"
+                        cancelText="No"
+                        placement='left'
+                    >
+                        <DeleteOutlined
+                            style={{ cursor: "pointer", color: "red" }}
+                        />
+                    </Popconfirm>
                 </Space>
             ),
         },
