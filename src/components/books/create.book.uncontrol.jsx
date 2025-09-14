@@ -5,6 +5,7 @@ import { createBookAPI, handleUpdateFile } from "../../services/api.service"
 const CreateBookUnControl = (props) => {
     const [selectedFile, setSelectedFile] = useState(null)
     const [preview, setPreview] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { isCreateBookOpen, setIsCreateBookOpen, loadBooks } = props
 
@@ -26,6 +27,7 @@ const CreateBookUnControl = (props) => {
     }
 
     const handleSubmitBtn = async (value) => {
+        setIsLoading(true)
         if (!selectedFile) {
             notification.error({
                 message: "Create Book error",
@@ -56,12 +58,16 @@ const CreateBookUnControl = (props) => {
                 description: res.message
             })
         }
+        setIsLoading(false)
     }
     return (
         <Modal
             title="Create Book"
             open={isCreateBookOpen}
             onOk={() => form.submit()}
+            okButtonProps={{
+                loading: isLoading
+            }}
             onCancel={() => {
                 setIsCreateBookOpen(false)
                 setSelectedFile(null)
@@ -161,7 +167,7 @@ const CreateBookUnControl = (props) => {
                     <img src={preview} width={100} height={"100%"} />
                 )}
             </Form>
-        </Modal>
+        </Modal >
 
     )
 }

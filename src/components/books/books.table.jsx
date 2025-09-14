@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { notification, Popconfirm, Space, Table } from "antd";
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { deleteBookAPI, fetchAllBooksAPI } from "../../services/api.service";
 import ViewBookDetail from "./view.book.detail";
 import UpdateBookControl from "./book.update.control";
@@ -12,8 +12,9 @@ const BooksTable = (props) => {
     const [isBookDetailOpen, setIsBookDetailOpen] = useState(false)
     const [dataUpdate, setDataUpdate] = useState(null)
 
+    const { dataBooks, current, pageSize, total, setCurrent, setPageSize, loadBooks, isLoading } = props
 
-    const { dataBooks, current, pageSize, total, setCurrent, setPageSize, setTotal, loadBooks } = props
+
 
     const handleDeleteBtn = async (id) => {
         const res = await deleteBookAPI(id)
@@ -140,6 +141,7 @@ const BooksTable = (props) => {
                         showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
                     }}
                 onChange={onChange}
+                loading={isLoading}
             />
 
             <ViewBookDetail

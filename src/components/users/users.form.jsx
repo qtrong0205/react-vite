@@ -11,10 +11,12 @@ const UserForm = (props) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [phone, setPhone] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const handleSubmitClick = async () => {
+        setIsLoading(true)
         const response = await createUserAPI(fullName, email, password, phone)
         if (response.data) {
             notification.success({
@@ -30,6 +32,7 @@ const UserForm = (props) => {
                 description: JSON.stringify(response.message)
             })
         }
+        setIsLoading(false)
     }
 
     const resetAndCloseModal = () => {
@@ -60,6 +63,9 @@ const UserForm = (props) => {
                 onCancel={() => resetAndCloseModal()}
                 maskClosable={false}
                 okText="Create"
+                okButtonProps={{
+                    loading: isLoading
+                }}
             >
                 <div
                     style={{ marginBottom: "15px" }}>

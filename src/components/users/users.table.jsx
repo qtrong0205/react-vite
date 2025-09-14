@@ -2,12 +2,12 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Popconfirm, notification } from "antd";
 import { Table } from 'antd';
 import UpdateUserModal from './update.user.modal';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ViewUserDetail from './view.user.detail';
 import { deleteUserAPI } from '../../services/api.service';
 
 const UserTable = (props) => {
-    const { dataUsers, loadUser, current, pageSize, total, setCurrent, setPageSize } = props
+    const { dataUsers, loadUser, current, pageSize, total, setCurrent, setPageSize, isLoading } = props
 
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false)
     const [dataUpdate, setDataUpdate] = useState(null)
@@ -129,6 +129,7 @@ const UserTable = (props) => {
                         showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
                     }}
                 onChange={onChange}
+                loading={isLoading}
             />
             <UpdateUserModal
                 isModalUpdateOpen={isModalUpdateOpen}

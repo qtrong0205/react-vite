@@ -1,10 +1,10 @@
-import { Link, NavLink, redirect, useNavigate } from 'react-router-dom'
-import { Menu, message, notification } from 'antd'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Menu, message } from 'antd'
 import {
     HomeOutlined, UsergroupAddOutlined, AuditOutlined, SettingOutlined
     , LoginOutlined, AliwangwangOutlined
 } from '@ant-design/icons';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
 import { LogoutAPI } from '../../services/api.service';
 const Header = () => {
@@ -13,6 +13,21 @@ const Header = () => {
     const { user, setUser } = useContext(AuthContext);
 
     let navigate = useNavigate();
+    const location = useLocation()
+
+    useEffect(() => {
+        console.log("check location", location)
+        if (location && location.pathname) {
+            const allRoutes = ["users", "books"]
+            const currentRoute = allRoutes.find(item => `/${item}` === location.pathname)
+            if (currentRoute) {
+                setCurrent(currentRoute)
+            }
+            else {
+                setCurrent("home")
+            }
+        }
+    }, [location])
 
     const onClick = e => {
         setCurrent(e.key);
@@ -67,7 +82,7 @@ const Header = () => {
 
         ...(user.id ?
             [{
-                label: `Welcome ${user.fullName}`,
+                label: `Welcome ${user.fullName} `,
                 key: 'setting',
                 icon: <AliwangwangOutlined />,
                 children: [

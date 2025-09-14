@@ -1,6 +1,6 @@
 import { Button } from "antd"
 import BooksTable from "../components/books/books.table"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import CreateBook from "../components/books/book.create"
 import { fetchAllBooksAPI } from "../services/api.service"
 import CreateBookUnControl from "../components/books/create.book.uncontrol"
@@ -11,18 +11,16 @@ const BookPage = () => {
     const [pageSize, setPageSize] = useState(5)
     const [total, setTotal] = useState(0)
 
+    const [isLoading, setIsLoading] = useState(false)
+
     useEffect(() => {
         loadBooks()
     }, [current, pageSize])
 
     const [isCreateBookOpen, setIsCreateBookOpen] = useState(false)
-    const [title, setTitle] = useState("")
-    const [author, setAuthor] = useState("")
-    const [price, setPrice] = useState("")
-    const [quantity, setQuantity] = useState("")
-    const [category, setCategory] = useState("")
 
-    const loadBooks = async () => {
+    const loadBooks = useCallback(async () => {
+        setIsLoading(true)
         const res = await fetchAllBooksAPI(current, pageSize)
         if (res.data) {
             setDataBooks(res.data.result)
@@ -30,7 +28,8 @@ const BookPage = () => {
             setPageSize(res.data.meta.pageSize)
             setTotal(res.data.meta.total)
         }
-    }
+        setIsLoading(false)
+    }, [current, pageSize])
     return (
         <div style={{ padding: "20px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px+" }}>
@@ -46,6 +45,7 @@ const BookPage = () => {
                 setPageSize={setPageSize}
                 setTotal={setTotal}
                 loadBooks={loadBooks}
+                isLoading={isLoading}
             />
 
             {/* <CreateBook

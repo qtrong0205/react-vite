@@ -1,6 +1,6 @@
 import UserForm from "../components/users/users.form"
 import UserTable from "../components/users/users.table"
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { fetchAllUserAPI } from '../services/api.service';
 
 const UserPage = () => {
@@ -9,12 +9,15 @@ const UserPage = () => {
     const [pageSize, setPageSize] = useState(5)
     const [total, setTotal] = useState(0)
 
+    const [isLoading, setIsLoading] = useState(false)
+
     // empty array => run once
     useEffect(() => {
         loadUser()
     }, [current, pageSize]) // [] + condition
 
-    const loadUser = async () => {
+    const loadUser = useCallback(async () => {
+        setIsLoading(true)
         const response = await fetchAllUserAPI(current, pageSize)
         if (response.data) {
             setDataUsers(response.data.result)
@@ -22,8 +25,8 @@ const UserPage = () => {
             setPageSize(response.data.meta.pageSize)
             setTotal(response.data.meta.total)
         }
-
-    }
+        setIsLoading(false)
+    }, [current, pageSize])
 
     return (
         <div style={{ padding: "0 25px" }}>
@@ -36,6 +39,7 @@ const UserPage = () => {
                 total={total}
                 setCurrent={setCurrent}
                 setPageSize={setPageSize}
+                isLoading={isLoading}
             />
         </div>)
 }
